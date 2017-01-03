@@ -1,0 +1,18 @@
+# KDE Config File 
+# Call this file kSlashTNG.kdelnk or kSlashTNG.desktop
+[KDE Desktop Entry]
+Name=SlashTNG
+Name[fr]=SlashTNG
+Name[hu]=SlashTNG
+Name[no]=SlashTNG
+Name[sk]=SlashTNG
+Name[cs]=SlashTNG
+Name[hr]=SlashTNG
+Name[pt]=SlashTNG
+Name[pt_BR]=SlashTNG
+Icon=kse.xpm
+Exec=kSlashTNG -caption "%c" %i %m
+Type=Application
+DocPath=kSlashTNG/index.html
+Comment=Variant of the role-playing game, NetHack - fight monsters and seek the Amulet of Yendor for your god!
+
