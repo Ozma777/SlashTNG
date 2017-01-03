@@ -1,0 +1,17 @@
+Welcome to the "NetHack, the Next Generation" directory!
+
+This directory contains the following files:
+
+  Size	Filename
+334188	nhTNG.shar
+ 17476	nhTNG.txt
+
+This directory contains the sources for NetHack, the Next Generation,
+a modified version of NetHack, and a text file describing the
+differences with normal NetHack, version 3.1.3.
+
+Note that the changes were made for BSD Unix, and have not been worked
+out for other systems. They have not even been tested (by me, that is)
+for BSD Unix itself. Executables or sources for MSDOS are not available.
+
+Boudewijn Wayers (dedos4@win.tue.nl).
