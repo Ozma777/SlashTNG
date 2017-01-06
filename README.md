@@ -1,5 +1,5 @@
 # SlashTNG
-SLASH'EM 0.0.7E7F3 with pretty much most of the next generation patched to it
+SLASH'EM 0.0.7E7F3 with pretty much all of the next generation patched to it
 
 Exploding wands fixed but wand of bugging STILL crashes the game, not sure why....BUG #1 of hopefully 1
 Rerolls and force attributes works!
