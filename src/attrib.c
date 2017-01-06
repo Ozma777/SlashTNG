@@ -544,8 +544,8 @@ reset_attribute_clock()
 }
 
 
-void
-init_attr(np)
+static void
+init_attr_(np)
 	register int	np;
 {
 	register int	i, x, tryct;
@@ -593,6 +593,100 @@ init_attr(np)
 	    np++;
 	}
 }
+ 
+ static char get_acception(void)
+ {
+ 	char c;
+ 
+ 	pline("St:");
+ 	if (ACURR(A_STR) > 118) {
+ 		pline("%2d",ACURR(A_STR) - 100);
+ 	} else if (ACURR(A_STR) == 118) {
+ 		pline("18/**");
+ 	} else if (ACURR(A_STR) > 18) {
+ 		pline("18/%02d",ACURR(A_STR) - 18);
+ 	} else {
+ 		pline("%-1d",ACURR(A_STR));
+ 	}
+ 	pline(" Dx:%-1d Co:%-1d In:%-1d Wi:%-1d Ch:%-1d  ",ACURR(A_DEX),ACURR(A_CON),ACURR(A_INT),ACURR(A_WIS),ACURR(A_CHA));
+ 	c = yn_function("Accept?","ynrq",'n');
+ 	return(c);
+ }
+ 
+ void init_attr(int np)
+ {
+ 	char c;
+ 	boolean forced,askforce,ok,done;
+ 	schar att;
+ 	int aval;
+ 	char buf[BUFSZ];
+ 	int i;
+ 
+ 	askforce = TRUE;
+ 	done = FALSE;
+ 	do {
+ 		if (askforce) {		
+ 			askforce = FALSE;
+ 			c = yn_function("Do you want to force anything?","yn",'n');
+ 			if (c == 'n') {
+ 				forced = FALSE;
+ 			} else {
+ 				forced = TRUE;
+ 				c = yn_function("What do you want to force?","sdciwh",'\0');
+ 				switch (c) {
+ 					case 's':	att = A_STR;	break;
+ 					case 'd':	att = A_DEX;	break;
+ 					case 'c':	att = A_CON;	break;
+ 					case 'i':	att = A_INT;	break;
+ 					case 'w':	att = A_WIS;	break;
+ 					case 'h':
+ 					default:	att = A_CHA;	break;
+ 				}
+ 				while (1) {
+ 					ok = TRUE;
+ 					getlin("What is the minimum value?",buf);
+ 					i = 0;
+ 					while (buf[i]) {
+ 						if (!isdigit(buf[i])) ok = FALSE;
+ 						i++;
+ 					}
+ 					if (!ok) continue;
+ 					aval = atoi(buf);
+ 					if (aval < ATTRMIN(att) || aval > ATTRMAX(att)) continue;
+ 					break;
+ 				}
+ 			}
+ 		}
+ 		i = 0;
+ 		ok = FALSE;
+ 		pline("Trying ... ");
+ 		while (i < 2000 && !ok) {
+ 			init_attr_(np);
+ 			if (forced) {
+ 				if (ACURR(att) >= aval) ok = TRUE;
+ 			} else {
+ 				ok = TRUE;
+ 			}
+ 			i++;
+ 		}
+ 		if (!ok) {
+ 			c = yn_function("This doesn't seem to work. Try again?","yn",'n');
+ 			if (c == 'n') askforce = TRUE;
+ 			done = FALSE;
+ 			continue;
+ 		}
+ 		c = get_acception();
+ 		switch (c) {
+ 			case 'y':	done = TRUE;
+ 					break;
+ 			case 'r':	askforce = TRUE;  /* fall through */
+ 			case 'n':	done = FALSE;
+ 					break;
+ 			case 'q':	exit_nhwindows(NULL);
+ 					terminate(0);
+ 		}
+ 	} while (!done);			
+ }
 
 void
 redist_attr()

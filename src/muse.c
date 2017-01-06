@@ -246,6 +246,7 @@ struct obj *otmp;
 #define MUSE_WAN_CREATE_HORDE 22
 #define MUSE_POT_VAMPIRE_BLOOD 23
 #define MUSE_RIN_TIMELY_BACKUP 24
+#define MUSE_WAN_BUGGING 25
 /*
 #define MUSE_INNATE_TPT 9999
  * We cannot use this.  Since monsters get unlimited teleportation, if they
@@ -520,6 +521,11 @@ struct monst *mtmp;
 			m.defensive = obj;
 			m.has_defense = MUSE_WAN_CREATE_HORDE;
 		}
+		nomore(MUSE_WAN_BUGGING);
+		if(obj->otyp == WAN_BUGGING && obj->spe > 0) {
+			m.defensive = obj;
+			m.has_defense = MUSE_WAN_BUGGING;
+		}
 		nomore(MUSE_POT_HEALING);
 		if(obj->otyp == POT_HEALING) {
 			m.defensive = obj;
@@ -720,6 +726,23 @@ mon_tele:
 		/* we made sure that there is a level for mtmp to go to */
 		migrate_to_level(mtmp, ledger_no(&u.uz) + 1,
 				 MIGR_RANDOM, (coord *)0);
+		return 2;
+	    }
+	case MUSE_WAN_BUGGING:
+	    {   coord cc;
+		struct permonst *pm=rndmonst();
+		int cnt = 1;
+		if (!enexto(&cc, mtmp->mx, mtmp->my, pm)) return 0;
+		mzapmsg(mtmp, otmp, FALSE);
+		otmp->spe--;
+		if (oseen) makeknown(WAN_BUGGING);
+		cnt = rnd(4) + 10;
+		while(cnt--) {
+			struct monst *mon;
+			if (!enexto(&cc, mtmp->mx, mtmp->my, pm)) continue;
+			mon = makemon(rndmonst(), cc.x, cc.y, NO_MM_FLAGS);
+			if (mon) newsym(mon->mx,mon->my);
+		}
 		return 2;
 	    }
 	case MUSE_WAN_CREATE_HORDE:
@@ -1075,6 +1098,9 @@ struct monst *mtmp;
 #define MUSE_SCR_EARTH 19
 #define MUSE_POT_AMNESIA 20
 #define MUSE_WAN_CANCELLATION 21	/* Lethe */
+#define MUSE_WAN_ACID 22
+#define MUSE_POT_CYANIDE 23
+#define MUSE_POT_RADIUM 24
 
 /* Select an offensive item/action for a monster.  Returns TRUE iff one is
  * found.
@@ -1185,6 +1211,16 @@ struct monst *mtmp;
 			m.offensive = obj;
 			m.has_offense = MUSE_POT_SLEEPING;
 		}
+		nomore(MUSE_POT_CYANIDE);
+		if(obj->otyp == POT_CYANIDE) {
+			m.offensive = obj;
+			m.has_offense = MUSE_POT_CYANIDE;
+		}
+		nomore(MUSE_POT_RADIUM);
+		if(obj->otyp == POT_RADIUM) {
+			m.offensive = obj;
+			m.has_offense = MUSE_POT_RADIUM;
+		}
 		/* Mik's Lethe patch - monsters use !oAmnesia */
 		nomore(MUSE_POT_AMNESIA);
 		if (obj->otyp == POT_AMNESIA) {
@@ -1195,6 +1231,11 @@ struct monst *mtmp;
 		if(obj->otyp == POT_SLEEPING) {
 			m.offensive = obj;
 			m.has_offense = MUSE_POT_SLEEPING;
+		}
+		nomore(MUSE_WAN_ACID);
+		    if(obj->otyp == WAN_ACID && obj->spe > 0) {
+			m.offensive = obj;
+			m.has_offense = MUSE_WAN_ACID;
 		}
 		/* KMH, balance patch -- monsters use potion of acid */
 		nomore(MUSE_POT_ACID);
@@ -1462,6 +1503,7 @@ struct monst *mtmp;
 	case MUSE_WAN_FIRE:
 	case MUSE_WAN_COLD:
 	case MUSE_WAN_LIGHTNING:
+	case MUSE_WAN_ACID:
 	case MUSE_WAN_MAGIC_MISSILE:
 		mzapmsg(mtmp, otmp, FALSE);
 		otmp->spe--;
@@ -1688,6 +1730,8 @@ struct monst *mtmp;
 	case MUSE_POT_CONFUSION:
 	case MUSE_POT_SLEEPING:
 	case MUSE_POT_ACID:
+	case MUSE_POT_CYANIDE:
+	case MUSE_POT_RADIUM:
 	case MUSE_POT_AMNESIA:
 		/* Note: this setting of dknown doesn't suffice.  A monster
 		 * which is out of sight might throw and it hits something _in_
@@ -2190,6 +2234,8 @@ struct obj *obj;
 		    typ == WAN_TELEPORTATION ||
 		    typ == WAN_CREATE_MONSTER ||
 		    typ == WAN_CREATE_HORDE ||
+			typ == WAN_BUGGING ||
+			typ == WAN_ACID ||
 		    typ == WAN_DRAINING	||
 		    typ == WAN_HEALING ||
 		    typ == WAN_EXTRA_HEALING ||
@@ -2208,6 +2254,8 @@ struct obj *obj;
 		    typ == POT_SLEEPING ||
 		    typ == POT_ACID ||
 		    typ == POT_CONFUSION ||
+			typ == POT_CYANIDE ||
+			typ == POT_RADIUM ||
 		    typ == POT_AMNESIA)
 		return TRUE;
 	    if (typ == POT_BLINDNESS && !attacktype(mon->data, AT_GAZE))

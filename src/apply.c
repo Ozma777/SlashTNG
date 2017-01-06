@@ -3196,6 +3196,13 @@ wand_explode(obj, hero_broke)
     case WAN_CANCELLATION:
     case WAN_POLYMORPH:
     case WAN_UNDEAD_TURNING:
+	case WAN_ACID:
+	expltype = EXPL_NOXIOUS;
+        explode(u.ux, u.uy, ZT_ACID, dmg, WAND_CLASS, expltype);
+	if (obj->dknown && !objects[obj->otyp].oc_name_known &&
+		!objects[obj->otyp].oc_uname)
+        docall(obj);
+	goto discard_broken_wand;
     case WAN_DRAINING:	/* KMH */
 	affects_objects = TRUE;
 	break;
@@ -3222,6 +3229,12 @@ wand_explode(obj, hero_broke)
 	affects_objects = TRUE;
 	break;
     case WAN_CREATE_HORDE: /* More damage than Create monster */
+	        dmg *= 2;
+	        break;
+	case WAN_BUGGING: /* Same damage as Create Horde since it creates multiple critters */
+	        dmg *= 2;
+	        break;
+	case WAN_WONDER: /* multiple types of effects so more damage */
 	        dmg *= 2;
 	        break;
     case WAN_HEALING:
@@ -3256,9 +3269,10 @@ wand_explode(obj, hero_broke)
 	    }
 	    continue;
 /* WAC catch Create Horde wands too */
-/* MAR make the monsters around you */
+/* MAR make the monsters around you. */
+/* Ozma bugging probably will create normal monsters but at least not crash game. */
 	} else if(obj->otyp == WAN_CREATE_MONSTER
-                || obj->otyp == WAN_CREATE_HORDE) {
+                || obj->otyp == WAN_CREATE_HORDE || obj->otyp == WAN_BUGGING) {
 	    /* u.ux,u.uy creates it near you--x,y might create it in rock */
 	    (void) makemon((struct permonst *)0, u.ux, u.uy, NO_MM_FLAGS);
 	    continue;

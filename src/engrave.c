@@ -645,8 +645,10 @@ doengrave()
 		    case WAN_SECRET_DOOR_DETECTION:
 		    case WAN_CREATE_MONSTER:
 		    case WAN_CREATE_HORDE:
+			case WAN_BUGGING:
 		    case WAN_ENLIGHTENMENT:
 		    case WAN_WISHING:
+			case WAN_WONDER:
 			zapnodir(otmp);
 			break;
 

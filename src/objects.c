@@ -1213,9 +1213,9 @@ WAND("polymorph",      "silver",   45, 200, 1, IMMEDIATE, SILVER,   HI_SILVER),
 WAND("teleportation",  "iridium",  45, 200, 1, IMMEDIATE, METAL,    CLR_BRIGHT_CYAN),
 WAND("create horde",   "black",     5, 300, 1, NODIR,     PLASTIC,  CLR_BLACK),
 WAND("extra healing",  "bronze",   30, 300, 1, IMMEDIATE, COPPER,   CLR_YELLOW),
-WAND("wonder",	"elven-lettered", 15, 500, 1, NODIR,     IRON,	 HI_METAL),
 WAND("bugging",	"wooden",		 5, 500, 1, NODIR,     WOOD,	 HI_METAL),
 WAND("wishing",        "pine",      5, 500, 1, NODIR,     WOOD,     HI_WOOD),
+WAND("wonder",	"elven-lettered", 15, 500, 1, NODIR,     IRON,	 HI_METAL),
 /* Ray wands have to come last, and in this order. */
 /* This is extremely kludgy, but that's what zap.c expects. */
 WAND("digging",        "iron",     45, 150, 1, RAY,       IRON,     HI_METAL),
