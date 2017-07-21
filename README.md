@@ -3,6 +3,11 @@ SLASH'EM 0.0.7E7F3 with pretty much all of the next generation patched to it
 
 Rerolls and force attributes works!
 
+Only problem (in issues I think) is that often times you can't die!
+So for now if you want a slashem with geek class also in which more often than not you can not die than this is for you!
+(meanwhile) I am trying to get this to work but have no idea why you can't die.....
+if anyone knows why please message me or fix an issue or do a pull request (PLEASE)
+
 Exploding wands of bugging and probably wonder SHOULD do damage to the character, BUT coding either like exploding create horde or
 even adding dmg *= 2; under it crashes the game
 perhaps I could maybe do an expltype first before dmg *= 2; but I didn't try it.
