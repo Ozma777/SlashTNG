@@ -16,3 +16,7 @@ I took the horrible shar file from j. ali's page (www.juiblex.co.uk/nethack/TNG.
  windows and with the help of AmyBSOD's integration of it into her game, I coded it into slashem.
 The Stormbringer doesn't draw vortexes. (minor thing maybe someone who knows how to do this could fix)
 :isn't really essential though the rumors file has been changed to accomodate the Stormbringer ACTUALLY drawing vortecies.
+
+
+A few weeks and I WILL have semi-OzSlashem grafted into this project to create a vanilla slashem with some enhancements (NethackTNG +
+others) 
